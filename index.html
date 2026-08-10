@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nordic Intelligence — Romance Fraud & Exploitation Awareness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FAFBFC;
+    --panel: #FFFFFF;
+    --panel-soft: #F1F5F9;
+    --border: #E2E8F0;
+    --ink: #101828;
+    --ink-soft: #475467;
+    --ink-faint: #98A2B3;
+    --accent: #1E3A8A;
+    --accent-2: #3B82F6;
+    --accent-tint: #EFF4FF;
+    --warn-bg: #0F2A6B;
+    --focus: #2563EB;
+    --radius: 18px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{ font-family:'Fraunces', Georgia, serif; }
+  a{ color: var(--accent-2); }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radius:4px; }
+
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 24px; }
+
+  /* Header */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,251,252,0.9);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .headbar{ display:flex; align-items:center; justify-content:space-between; height:76px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{
+    width:34px; height:34px; border-radius:9px;
+    background: linear-gradient(155deg, var(--accent-2), var(--accent));
+    display:flex; align-items:center; justify-content:center;
+    color:white; font-weight:800; font-size:14px; font-family:'Fraunces',serif;
+  }
+  .brand-text{ display:flex; flex-direction:column; line-height:1.15; }
+  .brand-text b{ font-size:15px; letter-spacing:0.01em; }
+  .brand-text span{ font-size:11px; color:var(--ink-faint); letter-spacing:0.03em; }
+
+  nav.pill{
+    display:none;
+    gap:2px;
+    background: var(--panel-soft);
+    border:1px solid var(--border);
+    padding:4px;
+    border-radius:999px;
+  }
+  nav.pill a{
+    color:var(--ink-soft); text-decoration:none; font-size:13px; font-weight:600;
+    padding:8px 14px; border-radius:999px;
+  }
+  nav.pill a:hover{ color:var(--ink); background:var(--panel); }
+
+  .lang-switch{ display:flex; gap:2px; background:var(--panel-soft); border:1px solid var(--border); padding:4px; border-radius:999px; }
+  .lang-switch button{
+    border:none; background:transparent; cursor:pointer;
+    font-family:inherit; font-size:12px; font-weight:700; letter-spacing:0.03em;
+    padding:7px 13px; border-radius:999px; color:var(--ink-faint);
+  }
+  .lang-switch button.active{ background:var(--panel); color:var(--accent); box-shadow:0 1px 2px rgba(16,24,40,0.08); }
+
+  /* Hero */
+  .hero{ padding:76px 0 56px; border-bottom:1px solid var(--border); }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-tint); border:1px solid #DCE6FF;
+    padding:7px 14px; border-radius:999px;
+  }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent-2); }
+  .hero h1{
+    font-size:clamp(2.1rem, 4.4vw, 3.4rem);
+    font-weight:500; letter-spacing:-0.01em; margin:20px 0 0; max-width:15ch; color:var(--ink);
+  }
+  .hero h1 em{ font-style:normal; color:var(--accent); }
+  .hero p.lead{ max-width:60ch; color:var(--ink-soft); font-size:1.05rem; margin-top:18px; }
+  .hero-actions{ display:flex; gap:12px; margin-top:30px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-weight:700; font-size:14px; padding:12px 20px; border-radius:11px;
+    text-decoration:none; border:1px solid transparent; cursor:pointer;
+  }
+  .btn-primary{ background:var(--accent); color:white; }
+  .btn-primary:hover{ background:#16296b; }
+  .btn-ghost{ background:var(--panel); color:var(--ink); border-color:var(--border); }
+  .btn-ghost:hover{ border-color:var(--accent-2); color:var(--accent); }
+
+  /* Stat strip */
+  .stat-strip{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--border); border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; margin-top:48px;
+  }
+  .stat-cell{ background:var(--panel); padding:24px 22px; }
+  .stat-num{ font-family:'Fraunces',serif; font-size:2.1rem; color:var(--accent); font-weight:500; }
+  .stat-label{ font-size:12.5px; color:var(--ink-soft); margin-top:4px; }
+  .stat-src{ font-size:11px; color:var(--ink-faint); margin-top:8px; }
+
+  /* Sections */
+  section.block{ padding:72px 0; border-bottom:1px solid var(--border); }
+  section.block:last-of-type{ border-bottom:none; }
+  .section-head{ max-width:640px; margin-bottom:40px; }
+  .kicker{ font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent-2); }
+  .section-head h2{ font-size:clamp(1.5rem,2.6vw,2rem); font-weight:500; margin:10px 0 0; color:var(--ink); }
+  .section-head p{ color:var(--ink-soft); margin-top:12px; }
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:28px;
+  }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+
+  /* Loverboy phases */
+  .phase{
+    background:var(--panel); border:1px solid var(--border); border-radius:16px;
+    padding:26px; position:relative; overflow:hidden;
+  }
+  .phase::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--accent-2);
+  }
+  .phase-num{
+    font-family:'Fraunces',serif; font-size:13px; color:var(--accent); font-weight:600;
+    letter-spacing:0.04em;
+  }
+  .phase h3{ font-size:16px; margin:10px 0 8px; color:var(--ink); font-weight:700; font-family:'Inter'; }
+  .phase p{ font-size:13.5px; color:var(--ink-soft); margin:0; }
+
+  .sources-line{ font-size:12.5px; color:var(--ink-faint); margin-top:22px; }
+  .sources-line a{ color:var(--ink-soft); text-decoration:underline; }
+
+  /* OSINT / verification tools */
+  .step-row{ display:flex; gap:18px; padding:22px 0; border-top:1px solid var(--border); }
+  .step-row:first-child{ border-top:none; padding-top:0; }
+  .step-num{
+    flex:0 0 auto; width:30px; height:30px; border-radius:9px;
+    background:var(--accent); color:white; font-family:'Fraunces',serif; font-weight:600; font-size:13px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .step-row h3{ font-size:15px; margin:0 0 6px; color:var(--ink); font-family:'Inter'; font-weight:700; }
+  .step-row p{ font-size:13.5px; color:var(--ink-soft); margin:0; }
+
+  .tool-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px; }
+  .tool-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:22px; display:flex; flex-direction:column; gap:8px;
+  }
+  .tool-card .tool-type{
+    font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--accent-2);
+  }
+  .tool-card h3{ font-size:15px; margin:0; color:var(--ink); font-family:'Inter'; font-weight:700; }
+  .tool-card p{ font-size:13px; color:var(--ink-soft); margin:0; flex:1; }
+  .tool-card a.tool-link{
+    font-size:12.5px; font-weight:700; color:var(--accent); text-decoration:none;
+    display:inline-flex; align-items:center; gap:4px; margin-top:4px;
+  }
+  .tool-card a.tool-link:hover{ text-decoration:underline; }
+  .caution-box{
+    background:var(--accent-tint); border:1px solid #DCE6FF; border-radius:14px;
+    padding:20px 22px; margin-top:20px;
+  }
+  .caution-box h3{ font-size:13.5px; margin:0 0 6px; color:var(--accent); }
+  .caution-box p{ font-size:13px; color:var(--ink-soft); margin:0; }
+
+  /* Elite section - list */
+  .tactic{
+    display:flex; gap:16px; padding:20px 0; border-top:1px solid var(--border);
+  }
+  .tactic:first-child{ border-top:none; padding-top:0; }
+  .tactic-icon{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--accent-tint); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;
+  }
+  .tactic h3{ font-size:15px; margin:0 0 4px; color:var(--ink); }
+  .tactic p{ font-size:13.5px; color:var(--ink-soft); margin:0; }
+
+  /* Warning / protection section */
+  .protect{
+    background: var(--warn-bg);
+    border-radius:24px; padding:48px 40px; color:#EAF0FF;
+  }
+  .protect .kicker{ color:#9DB8FF; }
+  .protect h2{ color:white; }
+  .protect-grid{ display:grid; grid-template-columns:1fr 1fr; gap:36px; margin-top:32px; }
+  .protect-col h3{ font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:#B9CBFF; font-weight:700; margin-bottom:16px; }
+  .flag-item{ display:flex; gap:12px; padding:12px 0; border-top:1px solid rgba(255,255,255,0.14); }
+  .flag-item:first-child{ border-top:none; padding-top:0; }
+  .flag-item .mark{ color:#7DA2FF; font-weight:800; }
+  .flag-item p{ margin:0; font-size:13.5px; color:#DCE6FF; }
+
+  .helplines{ margin-top:36px; padding-top:28px; border-top:1px solid rgba(255,255,255,0.14); }
+  .helplines h3{ font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:#B9CBFF; font-weight:700; margin-bottom:14px;}
+  .help-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .help-chip{
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18);
+    padding:10px 16px; border-radius:11px; font-size:13px; color:white; text-decoration:none;
+    display:flex; align-items:center; gap:8px;
+  }
+  .help-chip:hover{ background:rgba(255,255,255,0.16); }
+
+  footer{ padding:36px 0 48px; }
+  footer .wrap{ display:flex; flex-direction:column; gap:6px; }
+  footer p{ font-size:12px; color:var(--ink-faint); margin:0; }
+  footer a{ color:var(--ink-faint); }
+
+  [data-i18n]{ display:none; }
+  [data-i18n].active{ display:block; }
+  span[data-i18n].active{ display:inline; }
+
+  @media (min-width: 860px){
+    nav.pill{ display:flex; }
+  }
+  @media (max-width: 860px){
+    .grid-3{ grid-template-columns:1fr; }
+    .grid-2{ grid-template-columns:1fr; }
+    .stat-strip{ grid-template-columns:1fr; }
+    .protect-grid{ grid-template-columns:1fr; }
+    .protect{ padding:32px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap headbar">
+    <div class="brand">
+      <div class="brand-mark">N</div>
+      <div class="brand-text">
+        <b>Nordic Intelligence</b>
+        <span data-i18n="no" class="active">Romance Fraud &amp; Exploitation Awareness</span>
+        <span data-i18n="se">Romansbedrägeri &amp; Exploatering</span>
+        <span data-i18n="dk">Romancesvindel &amp; Udnyttelse</span>
+      </div>
+    </div>
+    <nav class="pill">
+      <a href="#data">
+        <span data-i18n="no" class="active">Data</span>
+        <span data-i18n="se">Data</span>
+        <span data-i18n="dk">Data</span>
+      </a>
+      <a href="#loverboy">
+        <span data-i18n="no" class="active">Metoden</span>
+        <span data-i18n="se">Metoden</span>
+        <span data-i18n="dk">Metoden</span>
+      </a>
+      <a href="#kontroll">
+        <span data-i18n="no" class="active">Kontroll</span>
+        <span data-i18n="se">Kontroll</span>
+        <span data-i18n="dk">Kontrol</span>
+      </a>
+      <a href="#osint">
+        <span data-i18n="no" class="active">Verifisering</span>
+        <span data-i18n="se">Verifiering</span>
+        <span data-i18n="dk">Verifikation</span>
+      </a>
+      <a href="#beskyttelse">
+        <span data-i18n="no" class="active">Beskyttelse</span>
+        <span data-i18n="se">Skydd</span>
+        <span data-i18n="dk">Beskyttelse</span>
+      </a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Language selector">
+      <button onclick="setLang('no')" id="btn-no" class="active">NO</button>
+      <button onclick="setLang('se')" id="btn-se">SE</button>
+      <button onclick="setLang('dk')" id="btn-dk">DK</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>
+      <span data-i18n="no" class="active">Uavhengig opplysningsportal</span>
+      <span data-i18n="se">Oberoende upplysningsportal</span>
+      <span data-i18n="dk">Uafhængig oplysningsportal</span>
+    </span>
+
+    <h1 data-i18n="no" class="active">Kunnskap er det <em>første forsvaret</em> mot manipulasjon</h1>
+    <h1 data-i18n="se">Kunskap är det <em>första försvaret</em> mot manipulation</h1>
+    <h1 data-i18n="dk">Viden er det <em>første forsvar</em> mod manipulation</h1>
+
+    <p class="lead" data-i18n="no" class="active">
+      Denne portalen samler forskning og feltdata fra Europakommisjonen, Payoke, KOK Germany og IOM Romania for å forklare hvordan emosjonell manipulasjon, Loverboy-metoder og organiserte utnyttelsesnettverk faktisk fungerer — slik at flere kan gjenkjenne faresignalene i tide.
+    </p>
+    <p class="lead" data-i18n="se">
+      Den här portalen samlar forskning och fältdata från Europeiska kommissionen, Payoke, KOK Germany och IOM Romania för att förklara hur emotionell manipulation, Loverboy-metoder och organiserade exploateringsnätverk faktiskt fungerar — så att fler kan känna igen varningssignalerna i tid.
+    </p>
+    <p class="lead" data-i18n="dk">
+      Denne portal samler forskning og feltdata fra Europa-Kommissionen, Payoke, KOK Germany og IOM Romania for at forklare, hvordan følelsesmæssig manipulation, Loverboy-metoder og organiserede udnyttelsesnetværk reelt fungerer — så flere kan genkende faresignalerne i tide.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#beskyttelse" class="btn btn-primary">
+        <span data-i18n="no" class="active">Se varselsignaler</span>
+        <span data-i18n="se">Se varningssignaler</span>
+        <span data-i18n="dk">Se advarselstegn</span>
+      </a>
+      <a href="#data" class="btn btn-ghost">
+        <span data-i18n="no" class="active">Les statistikken</span>
+        <span data-i18n="se">Läs statistiken</span>
+        <span data-i18n="dk">Læs statistikken</span>
+      </a>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <div class="stat-num">35%</div>
+        <div class="stat-label" data-i18n="no" class="active">av registrerte ofre i EU utnyttes til tvangsarbeid</div>
+        <div class="stat-label" data-i18n="se">av registrerade offer i EU utnyttjas för tvångsarbete</div>
+        <div class="stat-label" data-i18n="dk">af registrerede ofre i EU udnyttes til tvangsarbejde</div>
+        <div class="stat-src">European Commission, 2025</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">↑</div>
+        <div class="stat-label" data-i18n="no" class="active">Økning i registrerte ofre for menneskehandel i EU</div>
+        <div class="stat-label" data-i18n="se">Ökning av registrerade offer för människohandel i EU</div>
+        <div class="stat-label" data-i18n="dk">Stigning i registrerede ofre for menneskehandel i EU</div>
+        <div class="stat-src">European Commission, 2025</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">3</div>
+        <div class="stat-label" data-i18n="no" class="active">Faser i den typiske Loverboy-metodikken</div>
+        <div class="stat-label" data-i18n="se">Faser i den typiska Loverboy-metodiken</div>
+        <div class="stat-label" data-i18n="dk">Faser i den typiske Loverboy-metode</div>
+        <div class="stat-src">Payoke / KOK / IOM Romania</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1: DATA -->
+<section class="block" id="data">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">01 — EU statistikk</div>
+      <h2 data-i18n="no" class="active">En dokumentert vekst i digital utnyttelse</h2>
+      <h2 data-i18n="se">En dokumenterad ökning i digital exploatering</h2>
+      <h2 data-i18n="dk">En dokumenteret vækst i digital udnyttelse</h2>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <p data-i18n="no" class="active">
+          Ifølge <a href="https://home-affairs.ec.europa.eu/news/new-data-indicates-increase-victims-trafficking-human-beings-eu-2025-04-07_en" target="_blank" rel="noopener">Europakommisjonens rapport (2025)</a> øker antallet registrerte ofre for menneskehandel i EU for andre år på rad. Rapporten peker på at det digitale rommet i økende grad er blitt selve rekrutteringskanalen: kriminelle nettverk bruker sosiale medier, datingapper og krypterte meldingstjenester for å identifisere sårbare personer, bygge relasjoner over tid og gradvis flytte kontakten bort fra plattformer der andre kan følge med.
+        </p>
+        <p data-i18n="no" class="active">
+          Kommisjonen understreker at metodene har blitt mer sofistikerte de siste årene. Falske jobbtilbud — ofte presentert som "enkle" oppdrag i utlandet med god lønn — brukes som inngangsport til arbeidsutnyttelse, mens iscenesatte romantiske relasjoner brukes til å etablere en følelsesmessig avhengighet som senere utnyttes økonomisk eller seksuelt.
+        </p>
+        <p data-i18n="no" class="active">
+          Arbeidsutnyttelse utgjør nå 35 % av registrerte saker og er dermed den klart største enkeltkategorien. Samtidig viser rapporten en vedvarende vekst i saker knyttet til seksuell utnyttelse og annen organisert kriminalitet, der digital rekruttering — inkludert kjærlighetssvindel — spiller en stadig sentral rolle. Kommisjonen peker også på at ofre i økende grad krysser landegrenser innad i EU, noe som gjør etterforskning og oppfølging mer komplisert for enkeltland alene.
+        </p>
+        <p data-i18n="se">
+          Enligt <a href="https://home-affairs.ec.europa.eu/news/new-data-indicates-increase-victims-trafficking-human-beings-eu-2025-04-07_en" target="_blank" rel="noopener">Europeiska kommissionens rapport (2025)</a> ökar antalet registrerade offer för människohandel i EU för andra året i rad. Rapporten pekar på att den digitala miljön alltmer har blivit själva rekryteringskanalen: kriminella nätverk använder sociala medier, dejtingappar och krypterade meddelandetjänster för att identifiera sårbara personer, bygga relationer över tid och gradvis flytta kontakten bort från plattformar där andra kan följa med.
+        </p>
+        <p data-i18n="se">
+          Kommissionen betonar att metoderna har blivit mer sofistikerade de senaste åren. Falska jobberbjudanden — ofta presenterade som "enkla" uppdrag utomlands med god lön — används som inkörsport till arbetsexploatering, medan iscensatta romantiska relationer används för att etablera ett känslomässigt beroende som senare utnyttjas ekonomiskt eller sexuellt.
+        </p>
+        <p data-i18n="se">
+          Arbetsexploatering utgör nu 35 % av registrerade fall och är därmed den klart största enskilda kategorin. Samtidigt visar rapporten en fortsatt ökning av fall kopplade till sexuell exploatering och annan organiserad brottslighet, där digital rekrytering — inklusive romansbedrägeri — spelar en alltmer central roll. Kommissionen pekar också på att offer i ökande grad korsar landgränser inom EU, vilket gör utredning och uppföljning mer komplicerad för enskilda länder på egen hand.
+        </p>
+        <p data-i18n="dk">
+          Ifølge <a href="https://home-affairs.ec.europa.eu/news/new-data-indicates-increase-victims-trafficking-human-beings-eu-2025-04-07_en" target="_blank" rel="noopener">Europa-Kommissionens rapport (2025)</a> stiger antallet registrerede ofre for menneskehandel i EU for andet år i træk. Rapporten peger på, at det digitale rum i stigende grad er blevet selve rekrutteringskanalen: kriminelle netværk bruger sociale medier, datingapps og krypterede beskedtjenester til at identificere sårbare personer, opbygge relationer over tid og gradvist flytte kontakten væk fra platforme, hvor andre kan følge med.
+        </p>
+        <p data-i18n="dk">
+          Kommissionen understreger, at metoderne er blevet mere sofistikerede de seneste år. Falske jobtilbud — ofte præsenteret som "nemme" opgaver i udlandet med god løn — bruges som indgang til arbejdsudnyttelse, mens iscenesatte romantiske relationer bruges til at etablere en følelsesmæssig afhængighed, der senere udnyttes økonomisk eller seksuelt.
+        </p>
+        <p data-i18n="dk">
+          Arbejdsudnyttelse udgør nu 35 % af registrerede sager og er dermed den klart største enkeltkategori. Samtidig viser rapporten en vedvarende vækst i sager knyttet til seksuel udnyttelse og anden organiseret kriminalitet, hvor digital rekruttering — herunder romancesvindel — spiller en stadig mere central rolle. Kommissionen peger også på, at ofre i stigende grad krydser landegrænser inden for EU, hvilket gør efterforskning og opfølgning mere kompliceret for enkeltlande alene.
+        </p>
+      </div>
+
+      <div class="card" style="background:var(--accent-tint); border-color:#DCE6FF;">
+        <div class="stat-num" style="font-size:3rem;">35%</div>
+        <div style="font-weight:700; margin-top:6px;" data-i18n="no" class="active">Arbeidsutnyttelse i EU</div>
+        <div style="font-weight:700; margin-top:6px;" data-i18n="se">Arbetsexploatering i EU</div>
+        <div style="font-weight:700; margin-top:6px;" data-i18n="dk">Arbejdsudnyttelse i EU</div>
+        <p style="font-size:13px; margin-top:10px;" data-i18n="no" class="active">
+          Den nest største kategorien er seksuell utnyttelse, tett fulgt av utnyttelse knyttet til andre former for organisert kriminalitet — deriblant tvungen kriminalitet (f.eks. tyveri eller narkotikakurering) og romantikkbaserte svindelmetoder, der digital rekruttering spiller en stadig større rolle.
+        </p>
+        <p style="font-size:13px; margin-top:10px;" data-i18n="se">
+          Den näst största kategorin är sexuell exploatering, tätt följt av exploatering kopplad till andra former av organiserad brottslighet — bland annat tvingad brottslighet (t.ex. stöld eller drogkurirverksamhet) och romansbaserade bedrägerimetoder, där digital rekrytering spelar en allt större roll.
+        </p>
+        <p style="font-size:13px; margin-top:10px;" data-i18n="dk">
+          Den næststørste kategori er seksuel udnyttelse, tæt fulgt af udnyttelse knyttet til andre former for organiseret kriminalitet — herunder tvungen kriminalitet (fx tyveri eller narkotikakurering) og romancebaserede svindelmetoder, hvor digital rekruttering spiller en stadig større rolle.
+        </p>
+        <div style="margin-top:18px; padding-top:16px; border-top:1px solid #DCE6FF;">
+          <p style="font-size:12px; color:var(--ink-faint);" data-i18n="no" class="active">Kvinner og jenter utgjør fortsatt majoriteten av registrerte ofre for seksuell utnyttelse, mens andelen menn og gutter registrert for arbeidsutnyttelse har økt de siste årene.</p>
+          <p style="font-size:12px; color:var(--ink-faint);" data-i18n="se">Kvinnor och flickor utgör fortfarande majoriteten av registrerade offer för sexuell exploatering, medan andelen män och pojkar registrerade för arbetsexploatering har ökat de senaste åren.</p>
+          <p style="font-size:12px; color:var(--ink-faint);" data-i18n="dk">Kvinder og piger udgør fortsat majoriteten af registrerede ofre for seksuel udnyttelse, mens andelen af mænd og drenge registreret for arbejdsudnyttelse er steget de seneste år.</p>
+        </div>
+      </div>
+    </div>
+    <p class="sources-line">Source: European Commission — Migration &amp; Home Affairs, "New data indicates an increase of victims of trafficking in human beings in the EU" (2025). <a href="https://home-affairs.ec.europa.eu/news/new-data-indicates-increase-victims-trafficking-human-beings-eu-2025-04-07_en" target="_blank" rel="noopener">Les hele rapporten →</a></p>
+  </div>
+</section>
+
+<!-- SECTION 2: LOVERBOY -->
+<section class="block" id="loverboy">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">02 — Metodikk</div>
+      <h2 data-i18n="no" class="active">Anatomien bak Loverboy-metoden</h2>
+      <h2 data-i18n="se">Anatomin bakom Loverboy-metoden</h2>
+      <h2 data-i18n="dk">Anatomien bag Loverboy-metoden</h2>
+      <p data-i18n="no" class="active">Basert på analyser fra Payoke, KOK Germany og IOM Romania følger denne formen for utnyttelse ofte et gjenkjennelig tretrinnsmønster.</p>
+      <p data-i18n="se">Baserat på analyser från Payoke, KOK Germany och IOM Romania följer denna form av exploatering ofta ett igenkännbart tresteg­smönster.</p>
+      <p data-i18n="dk">Baseret på analyser fra Payoke, KOK Germany og IOM Romania følger denne form for udnyttelse ofte et genkendeligt tretrinsmønster.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="phase">
+        <div class="phase-num">01</div>
+        <h3 data-i18n="no" class="active">Love bombing</h3>
+        <h3 data-i18n="se">Love bombing</h3>
+        <h3 data-i18n="dk">Love bombing</h3>
+        <p data-i18n="no" class="active">Offeret overøses med oppmerksomhet, komplimenter, gaver og løfter om en felles fremtid. Kontakten er ofte intens fra dag én — daglige meldinger, lange samtaler og en følelse av å ha funnet noe sjeldent. Denne intensiteten er ikke tilfeldig: den er designet for å skape rask emosjonell tilknytning før offeret rekker å vurdere relasjonen kritisk.</p>
+        <p data-i18n="no" class="active" style="margin-top:10px;">Typiske trekk i denne fasen er raske kjærlighetserklæringer, fremtidsplaner (flytting sammen, forlovelse) presentert svært tidlig, og en gjerningsperson som virker "perfekt tilpasset" offerets behov og ønsker.</p>
+        <p data-i18n="se">Offret överöses med uppmärksamhet, komplimanger, gåvor och löften om en gemensam framtid. Kontakten är ofta intensiv från dag ett — dagliga meddelanden, långa samtal och en känsla av att ha hittat något sällsynt. Denna intensitet är inte slumpmässig: den är utformad för att skapa snabb emotionell bindning innan offret hinner granska relationen kritiskt.</p>
+        <p data-i18n="se" style="margin-top:10px;">Typiska drag i denna fas är snabba kärleksförklaringar, framtidsplaner (att flytta ihop, förlovning) som presenteras mycket tidigt, och en gärningsperson som verkar "perfekt anpassad" till offrets behov och önskningar.</p>
+        <p data-i18n="dk">Offeret overøses med opmærksomhed, komplimenter, gaver og løfter om en fælles fremtid. Kontakten er ofte intens fra dag ét — daglige beskeder, lange samtaler og en følelse af at have fundet noget sjældent. Denne intensitet er ikke tilfældig: den er designet til at skabe hurtig følelsesmæssig tilknytning, før offeret når at vurdere forholdet kritisk.</p>
+        <p data-i18n="dk" style="margin-top:10px;">Typiske træk i denne fase er hurtige kærlighedserklæringer, fremtidsplaner (at flytte sammen, forlovelse) præsenteret meget tidligt, og en gerningsperson, der virker "perfekt tilpasset" offerets behov og ønsker.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">02</div>
+        <h3 data-i18n="no" class="active">Isolasjon</h3>
+        <h3 data-i18n="se">Isolering</h3>
+        <h3 data-i18n="dk">Isolation</h3>
+        <p data-i18n="no" class="active">Gjerningspersonen distanserer gradvis offeret fra familie, venner og øvrig sosialt nettverk — systematisk fjernes de som kunne stilt kritiske spørsmål eller sett endringer i offerets oppførsel. Isolasjonen fremstår sjelden som et krav; den presenteres ofte som et uttrykk for kjærlighet ("jeg vil bare ha deg for meg selv") eller nødvendighet ("de forstår ikke oss").</p>
+        <p data-i18n="no" class="active" style="margin-top:10px;">Etter hvert kan gjerningspersonen også kontrollere offerets tilgang til telefon, penger eller identitetsdokumenter, samt oppmuntre til å flytte til et nytt sted — ofte i et annet land — der offeret har enda færre å støtte seg på.</p>
+        <p data-i18n="se">Gärningspersonen distanserar gradvis offret från familj, vänner och övrigt socialt nätverk — systematiskt avlägsnas de som skulle kunna ställa kritiska frågor eller se förändringar i offrets beteende. Isoleringen framstår sällan som ett krav; den presenteras ofta som ett uttryck för kärlek ("jag vill bara ha dig för mig själv") eller nödvändighet ("de förstår inte oss").</p>
+        <p data-i18n="se" style="margin-top:10px;">Efter hand kan gärningspersonen även kontrollera offrets tillgång till telefon, pengar eller identitetshandlingar, samt uppmuntra till att flytta till en ny plats — ofta i ett annat land — där offret har ännu färre att stödja sig på.</p>
+        <p data-i18n="dk">Gerningspersonen fjerner gradvist offeret fra familie, venner og øvrigt socialt netværk — systematisk fjernes dem, der kunne stille kritiske spørgsmål eller se ændringer i offerets adfærd. Isolationen fremstår sjældent som et krav; den præsenteres ofte som et udtryk for kærlighed ("jeg vil bare have dig for mig selv") eller nødvendighed ("de forstår ikke os").</p>
+        <p data-i18n="dk" style="margin-top:10px;">Efterhånden kan gerningspersonen også kontrollere offerets adgang til telefon, penge eller identitetsdokumenter samt opmuntre til at flytte til et nyt sted — ofte i et andet land — hvor offeret har endnu færre at støtte sig til.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">03</div>
+        <h3 data-i18n="no" class="active">Krise og utnyttelse</h3>
+        <h3 data-i18n="se">Kris och exploatering</h3>
+        <h3 data-i18n="dk">Krise og udnyttelse</h3>
+        <p data-i18n="no" class="active">En kunstig gjeld eller krise iscenesettes — for eksempel en påstått sykdom i familien, en forretning i fare, eller trusler fra "farlige" personer gjerningspersonen skylder penger. Offeret, som nå er følelsesmessig avhengig og sosialt isolert, presses til å "redde" situasjonen gjennom prostitusjon, ulønnet eller underbetalt arbeid, kriminelle ærend (f.eks. narkotikakurering) eller å ta opp lån i eget navn.</p>
+        <p data-i18n="no" class="active" style="margin-top:10px;">Når utnyttelsen er i gang, brukes ofte en kombinasjon av følelsesmessig press (skyldfølelse, trusler om å avslutte forholdet) og reell trussel eller vold for å opprettholde kontrollen. Mange ofre blir værende fordi de fortsatt tror på løftet om en felles fremtid "når krisen er over".</p>
+        <p data-i18n="se">En konstgjord skuld eller kris iscensätts — till exempel en påstådd sjukdom i familjen, ett företag i fara, eller hot från "farliga" personer som gärningspersonen är skyldig pengar. Offret, som nu är känslomässigt beroende och socialt isolerat, pressas att "rädda" situationen genom prostitution, obetalt eller underbetalt arbete, kriminella ärenden (t.ex. drogkurirverksamhet) eller att ta lån i eget namn.</p>
+        <p data-i18n="se" style="margin-top:10px;">När exploateringen väl är igång används ofta en kombination av känslomässig press (skuldkänslor, hot om att avsluta relationen) och verkligt hot eller våld för att upprätthålla kontrollen. Många offer stannar kvar eftersom de fortfarande tror på löftet om en gemensam framtid "när krisen är över".</p>
+        <p data-i18n="dk">En kunstig gæld eller krise iscenesættes — for eksempel en påstået sygdom i familien, en forretning i fare, eller trusler fra "farlige" personer, som gerningspersonen skylder penge. Offeret, som nu er følelsesmæssigt afhængigt og socialt isoleret, presses til at "redde" situationen gennem prostitution, ulønnet eller underbetalt arbejde, kriminelle ærinder (fx narkotikakurering) eller at optage lån i eget navn.</p>
+        <p data-i18n="dk" style="margin-top:10px;">Når udnyttelsen først er i gang, bruges ofte en kombination af følelsesmæssigt pres (skyldfølelse, trusler om at afslutte forholdet) og reel trussel eller vold for at opretholde kontrollen. Mange ofre bliver, fordi de stadig tror på løftet om en fælles fremtid "når krisen er ovre".</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <h3 style="font-size:15px; margin:0 0 10px;" data-i18n="no" class="active">Hvorfor er metoden så effektiv?</h3>
+      <h3 style="font-size:15px; margin:0 0 10px;" data-i18n="se">Varför är metoden så effektiv?</h3>
+      <h3 style="font-size:15px; margin:0 0 10px;" data-i18n="dk">Hvorfor er metoden så effektiv?</h3>
+      <p style="font-size:13.5px; color:var(--ink-soft); margin:0;" data-i18n="no" class="active">
+        Feltorganisasjoner som Payoke og KOK Germany peker på at Loverboy-metoden er effektiv nettopp fordi den ikke ser ut som utnyttelse i starten — den ser ut som kjærlighet. Ofrene identifiserer seg sjelden selv som ofre for menneskehandel, siden relasjonen begynte som noe de opplevde som ekte og frivillig. Dette gjør det vanskeligere for både ofre og deres nettverk å oppdage hva som skjer før utnyttelsen er godt etablert, og det er en av grunnene til at forebyggende kunnskap om metodikken er så viktig.
+      </p>
+      <p style="font-size:13.5px; color:var(--ink-soft); margin:0;" data-i18n="se">
+        Fältorganisationer som Payoke och KOK Germany påpekar att Loverboy-metoden är effektiv just för att den inte ser ut som exploatering i början — den ser ut som kärlek. Offren identifierar sig sällan själva som offer för människohandel, eftersom relationen började som något de upplevde som äkta och frivilligt. Detta gör det svårare för både offer och deras nätverk att upptäcka vad som händer innan exploateringen är väletablerad, och det är en av anledningarna till att förebyggande kunskap om metodiken är så viktig.
+      </p>
+      <p style="font-size:13.5px; color:var(--ink-soft); margin:0;" data-i18n="dk">
+        Feltorganisationer som Payoke og KOK Germany peger på, at Loverboy-metoden er effektiv netop fordi den ikke ligner udnyttelse i starten — den ligner kærlighed. Ofrene identificerer sjældent sig selv som ofre for menneskehandel, da forholdet begyndte som noget, de oplevede som ægte og frivilligt. Det gør det sværere for både ofre og deres netværk at opdage, hvad der sker, før udnyttelsen er godt etableret, og det er en af grundene til, at forebyggende viden om metoden er så vigtig.
+      </p>
+    </div>
+
+    <p class="sources-line">
+      Sources: <a href="https://www.payoke.be/en/the-payoke-way/about-human-trafficking/loverboys/" target="_blank" rel="noopener">Payoke</a>,
+      <a href="https://www.kok-gegen-menschenhandel.de/en/menschenhandel/formen-der-ausbeutung/loverboy-methode" target="_blank" rel="noopener">KOK Germany</a>,
+      <a href="https://romania.iom.int/news/understanding-lover-boy-technique-human-trafficking" target="_blank" rel="noopener">IOM Romania</a>
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 3: STRUCTURAL CONTROL -->
+<section class="block" id="kontroll">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">03 — Strukturell kontroll</div>
+      <h2 data-i18n="no" class="active">Hvordan lukkede miljøer forsterker kontroll</h2>
+      <h2 data-i18n="se">Hur slutna miljöer förstärker kontroll</h2>
+      <h2 data-i18n="dk">Hvordan lukkede miljøer forstærker kontrol</h2>
+      <p data-i18n="no" class="active">Sosiologiske studier av høyprofilerte utnyttelsessaker viser at manipulasjon på gruppenivå ofte følger de samme grunnleggende mekanismene som individuell manipulasjon, bare i større skala og med institusjonelle virkemidler.</p>
+      <p data-i18n="se">Sociologiska studier av högprofilerade exploateringsfall visar att manipulation på gruppnivå ofta följer samma grundläggande mekanismer som individuell manipulation, fast i större skala och med institutionella medel.</p>
+      <p data-i18n="dk">Sociologiske studier af højprofilerede udnyttelsessager viser, at manipulation på gruppeniveau ofte følger de samme grundlæggende mekanismer som individuel manipulation — blot i større skala og med institutionelle midler.</p>
+    </div>
+
+    <div class="card">
+      <div class="tactic">
+        <div class="tactic-icon">1</div>
+        <div>
+          <h3 data-i18n="no" class="active">Status- og luksusillusjon</h3>
+          <h3 data-i18n="se">Status- och lyxillusion</h3>
+          <h3 data-i18n="dk">Status- og luksusillusion</h3>
+          <p data-i18n="no" class="active">Rekruttering skjer via eksklusive miljøer, tilsynelatende prestisjefylte muligheter eller sosiale/religiøse fellesskap som gir følelsen av unik tilhørighet.</p>
+          <p data-i18n="se">Rekrytering sker via exklusiva miljöer, till synes prestigefyllda möjligheter eller sociala/religiösa gemenskaper som ger en känsla av unik tillhörighet.</p>
+          <p data-i18n="dk">Rekruttering sker via eksklusive miljøer, tilsyneladende prestigefyldte muligheder eller sociale/religiøse fællesskaber, der giver en følelse af unik tilhørsforhold.</p>
+        </div>
+      </div>
+      <div class="tactic">
+        <div class="tactic-icon">2</div>
+        <div>
+          <h3 data-i18n="no" class="active">Gjensidig overvåkning i gruppen</h3>
+          <h3 data-i18n="se">Ömsesidig övervakning i gruppen</h3>
+          <h3 data-i18n="dk">Gensidig overvågning i gruppen</h3>
+          <p data-i18n="no" class="active">I lukkede strukturer læres medlemmer til å overvåke og rapportere om hverandre, noe som gjør det vanskeligere å bryte ut på egen hånd.</p>
+          <p data-i18n="se">I slutna strukturer lärs medlemmar att övervaka och rapportera om varandra, vilket gör det svårare att bryta sig ut på egen hand.</p>
+          <p data-i18n="dk">I lukkede strukturer læres medlemmer til at overvåge og rapportere om hinanden, hvilket gør det sværere at bryde ud på egen hånd.</p>
+        </div>
+      </div>
+      <div class="tactic">
+        <div class="tactic-icon">3</div>
+        <div>
+          <h3 data-i18n="no" class="active">Kompromittering</h3>
+          <h3 data-i18n="se">Kompromettering</h3>
+          <h3 data-i18n="dk">Kompromittering</h3>
+          <p data-i18n="no" class="active">Systematisk innsamling av sensitivt materiale eller informasjon — bilder, videoer, opptak eller kunnskap om personlige hemmeligheter — brukes senere som pressmiddel for å hindre at ofre forlater forholdet, snakker med utenforstående eller melder fra til myndigheter. Selve vissheten om at slikt materiale finnes, er ofte nok til å opprettholde taushet i lang tid.</p>
+          <p data-i18n="se">Systematisk insamling av känsligt material eller information — bilder, videor, inspelningar eller kunskap om personliga hemligheter — används senare som påtryckningsmedel för att hindra offer från att lämna relationen, tala med utomstående eller anmäla till myndigheter. Själva vetskapen om att sådant material finns är ofta nog för att upprätthålla tystnad under lång tid.</p>
+          <p data-i18n="dk">Systematisk indsamling af følsomt materiale eller information — billeder, videoer, optagelser eller viden om personlige hemmeligheder — bruges senere som pressionsmiddel til at forhindre ofre i at forlade forholdet, tale med udenforstående eller anmelde det til myndighederne. Selve vishedom om, at sådant materiale findes, er ofte nok til at opretholde tavshed i lang tid.</p>
+        </div>
+      </div>
+      <div class="tactic">
+        <div class="tactic-icon">4</div>
+        <div>
+          <h3 data-i18n="no" class="active">Turnering av skyld og lojalitet</h3>
+          <h3 data-i18n="se">Vändning av skuld och lojalitet</h3>
+          <h3 data-i18n="dk">Vending af skyld og loyalitet</h3>
+          <p data-i18n="no" class="active">Offeret læres til å tolke egne tvil eller mistanker som illojalitet eller utakknemlighet, ofte forsterket av gruppepress fra andre i strukturen. Dette snur ansvaret bort fra gjerningspersonen og gjør det psykologisk vanskeligere å bryte ut, selv når offeret intellektuelt forstår at noe er galt.</p>
+          <p data-i18n="se">Offret lärs att tolka egna tvivel eller misstankar som illojalitet eller otacksamhet, ofta förstärkt av grupptryck från andra i strukturen. Detta vänder ansvaret bort från gärningspersonen och gör det psykologiskt svårare att bryta sig ut, även när offret intellektuellt förstår att något är fel.</p>
+          <p data-i18n="dk">Offeret læres til at tolke egne tvivl eller mistanker som illoyalitet eller utaknemmelighed, ofte forstærket af gruppepres fra andre i strukturen. Det vender ansvaret væk fra gerningspersonen og gør det psykologisk sværere at bryde ud, selv når offeret intellektuelt forstår, at noget er galt.</p>
+        </div>
+      </div>
+    </div>
+    <p class="sources-line" data-i18n="no" class="active">Analyse basert på offentlig dokumenterte, høyprofilerte saker om organisert utnyttelse og sekterisk kontroll.</p>
+    <p class="sources-line" data-i18n="se">Analys baserad på offentligt dokumenterade, högprofilerade fall av organiserad exploatering och sekteristisk kontroll.</p>
+    <p class="sources-line" data-i18n="dk">Analyse baseret på offentligt dokumenterede, højprofilerede sager om organiseret udnyttelse og sekterisk kontrol.</p>
+  </div>
+</section>
+
+<!-- SECTION 4: OSINT / DIGITAL VERIFICATION -->
+<section class="block" id="osint">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">04 — <span data-i18n="no" class="active">Digital verifisering (OSINT)</span><span data-i18n="se">Digital verifiering (OSINT)</span><span data-i18n="dk">Digital verifikation (OSINT)</span></div>
+      <h2 data-i18n="no" class="active">Slik sjekker du hvem du faktisk snakker med</h2>
+      <h2 data-i18n="se">Så kontrollerar du vem du faktiskt pratar med</h2>
+      <h2 data-i18n="dk">Sådan tjekker du, hvem du faktisk taler med</h2>
+      <p data-i18n="no" class="active">OSINT (Open Source Intelligence) betyr rett og slett å bruke fritt tilgjengelig informasjon — bilder, offentlige profiler, søkemotorer — til å verifisere en persons identitet. Dette er de samme grunnleggende teknikkene journalister og svindelforebyggende organisasjoner bruker, og hvem som helst kan lære dem.</p>
+      <p data-i18n="se">OSINT (Open Source Intelligence) innebär helt enkelt att använda fritt tillgänglig information — bilder, offentliga profiler, sökmotorer — för att verifiera en persons identitet. Det är samma grundläggande tekniker som journalister och bedrägeriförebyggande organisationer använder, och vem som helst kan lära sig dem.</p>
+      <p data-i18n="dk">OSINT (Open Source Intelligence) betyder ganske enkelt at bruge frit tilgængelig information — billeder, offentlige profiler, søgemaskiner — til at verificere en persons identitet. Det er de samme grundlæggende teknikker, journalister og svindelforebyggende organisationer bruger, og alle kan lære dem.</p>
+    </div>
+
+    <div class="card">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div>
+          <h3 data-i18n="no" class="active">Ta et skjermbilde av profilbildet</h3>
+          <h3 data-i18n="se">Ta en skärmdump av profilbilden</h3>
+          <h3 data-i18n="dk">Tag et skærmbillede af profilbilledet</h3>
+          <p data-i18n="no" class="active">Lagre profilbildet(ene) på enheten din. Jo flere bilder du har fra profilen, jo bedre — svindlere gjenbruker ofte bilder stjålet fra ekte, uskyldige personers sosiale medier.</p>
+          <p data-i18n="se">Spara profilbilden(erna) på din enhet. Ju fler bilder du har från profilen, desto bättre — bedragare återanvänder ofta bilder stulna från riktiga, oskyldiga personers sociala medier.</p>
+          <p data-i18n="dk">Gem profilbilledet/-billederne på din enhed. Jo flere billeder du har fra profilen, jo bedre — svindlere genbruger ofte billeder stjålet fra rigtige, uskyldige personers sociale medier.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div>
+          <h3 data-i18n="no" class="active">Kjør et omvendt bildesøk</h3>
+          <h3 data-i18n="se">Kör en omvänd bildsökning</h3>
+          <h3 data-i18n="dk">Kør en omvendt billedsøgning</h3>
+          <p data-i18n="no" class="active">Last opp bildet til en søkemotor som leter etter hvor det samme bildet dukker opp andre steder på nettet. Dukker bildet opp under et annet navn, i en modellportefølje, eller på et nyhetsbilde av en helt annen person — er det et klart varselsignal.</p>
+          <p data-i18n="se">Ladda upp bilden till en sökmotor som letar efter var samma bild dyker upp på andra ställen på nätet. Dyker bilden upp under ett annat namn, i en modellportfölj, eller i en nyhetsbild av en helt annan person — är det ett tydligt varningstecken.</p>
+          <p data-i18n="dk">Upload billedet til en søgemaskine, der leder efter, hvor det samme billede dukker op andre steder på nettet. Dukker billedet op under et andet navn, i en modelportefølje, eller i et nyhedsbillede af en helt anden person — er det et klart advarselstegn.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div>
+          <h3 data-i18n="no" class="active">Sjekk video- og samtaleinnhold for uoverensstemmelser</h3>
+          <h3 data-i18n="se">Kontrollera video- och samtalsinnehåll för avvikelser</h3>
+          <h3 data-i18n="dk">Tjek video- og samtaleindhold for uoverensstemmelser</h3>
+          <p data-i18n="no" class="active">Be om en kort videosamtale eller et bilde med en spesifikk håndbevegelse/dato skrevet på en lapp. Personer som konsekvent nekter videosamtaler, alltid har "dårlig nett", eller sender videoklipp som virker gjenbrukt, bør vekke mistanke. Verktøy for videoverifisering kan avdekke om et videoklipp er manipulert eller gjenbrukt fra en annen kilde.</p>
+          <p data-i18n="se">Be om ett kort videosamtal eller en bild med en specifik handrörelse/datum skrivet på en lapp. Personer som konsekvent vägrar videosamtal, alltid har "dåligt nät", eller skickar videoklipp som verkar återanvända, bör väcka misstankar. Verktyg för videoverifiering kan avslöja om ett videoklipp är manipulerat eller återanvänt från en annan källa.</p>
+          <p data-i18n="dk">Bed om en kort videosamtale eller et billede med en specifik håndbevægelse/dato skrevet på en seddel. Personer, der konsekvent nægter videosamtaler, altid har "dårligt netværk", eller sender videoklip, der virker genbrugte, bør vække mistanke. Værktøjer til videoverifikation kan afsløre, om et videoklip er manipuleret eller genbrugt fra en anden kilde.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div>
+          <h3 data-i18n="no" class="active">Kryssjekk detaljene i historien</h3>
+          <h3 data-i18n="se">Korskolla detaljerna i berättelsen</h3>
+          <h3 data-i18n="dk">Krydstjek detaljerne i historien</h3>
+          <p data-i18n="no" class="active">Søk opp arbeidsgiveren, adressen eller "krisen" personen beskriver. Falske profiler bruker ofte historier som ikke tåler et enkelt Google-søk — arbeidsplasser som ikke finnes, adresser som ikke stemmer, eller nyhetssaker som ikke kan bekreftes.</p>
+          <p data-i18n="se">Sök upp arbetsgivaren, adressen eller "krisen" personen beskriver. Falska profiler använder ofta berättelser som inte tål en enkel Google-sökning — arbetsplatser som inte finns, adresser som inte stämmer, eller nyhetshändelser som inte kan bekräftas.</p>
+          <p data-i18n="dk">Slå arbejdsgiveren, adressen eller "krisen" personen beskriver op. Falske profiler bruger ofte historier, der ikke tåler en simpel Google-søgning — arbejdspladser, der ikke findes, adresser, der ikke stemmer, eller nyhedshistorier, der ikke kan bekræftes.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div>
+          <h3 data-i18n="no" class="active">Sjekk offentlige registre</h3>
+          <h3 data-i18n="se">Kontrollera offentliga register</h3>
+          <h3 data-i18n="dk">Tjek offentlige registre</h3>
+          <p data-i18n="no" class="active">Hvis personen hevder å eie en bedrift, jobbe som "investor" eller drive et selskap, kan dette som regel sjekkes gratis i offisielle foretaksregistre. Finnes ikke selskapet, eller stemmer ikke rollen personen oppgir med hva registeret viser, er det et sterkt varselsignal.</p>
+          <p data-i18n="se">Om personen hävdar att den äger ett företag, jobbar som "investerare" eller driver ett bolag, kan detta oftast kontrolleras gratis i officiella bolagsregister. Finns inte bolaget, eller stämmer inte rollen personen uppger med vad registret visar, är det ett starkt varningstecken.</p>
+          <p data-i18n="dk">Hvis personen hævder at eje en virksomhed, arbejde som "investor" eller drive et selskab, kan dette som regel tjekkes gratis i officielle virksomhedsregistre. Findes selskabet ikke, eller stemmer den oplyste rolle ikke med, hvad registret viser, er det et stærkt advarselstegn.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); margin-top:36px;" data-i18n="no" class="active">Gratis, anerkjente verktøy</h3>
+    <h3 style="font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); margin-top:36px;" data-i18n="se">Gratis, erkända verktyg</h3>
+    <h3 style="font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); margin-top:36px;" data-i18n="dk">Gratis, anerkendte værktøjer</h3>
+
+    <div class="tool-grid">
+      <div class="tool-card">
+        <span class="tool-type">Reverse Image Search</span>
+        <h3>Google Images</h3>
+        <p data-i18n="no" class="active">Last opp eller lim inn et bilde for å se hvor det ellers dukker opp på nettet. Gratis og krever ingen installasjon.</p>
+        <p data-i18n="se">Ladda upp eller klistra in en bild för att se var den annars dyker upp på nätet. Gratis och kräver ingen installation.</p>
+        <p data-i18n="dk">Upload eller indsæt et billede for at se, hvor det ellers dukker op på nettet. Gratis og kræver ingen installation.</p>
+        <a class="tool-link" href="https://images.google.com" target="_blank" rel="noopener">images.google.com ↗</a>
+      </div>
+      <div class="tool-card">
+        <span class="tool-type">Reverse Image Search</span>
+        <h3>TinEye</h3>
+        <p data-i18n="no" class="active">Spesialisert søkemotor for omvendt bildesøk, ofte god på å finne eldste versjon av et bilde på nettet.</p>
+        <p data-i18n="se">Specialiserad sökmotor för omvänd bildsökning, ofta bra på att hitta den äldsta versionen av en bild på nätet.</p>
+        <p data-i18n="dk">Specialiseret søgemaskine til omvendt billedsøgning, ofte god til at finde den ældste version af et billede på nettet.</p>
+        <a class="tool-link" href="https://tineye.com" target="_blank" rel="noopener">tineye.com ↗</a>
+      </div>
+      <div class="tool-card">
+        <span class="tool-type">Reverse Image Search</span>
+        <h3>Yandex Images</h3>
+        <p data-i18n="no" class="active">Den russiske søkemotoren har ofte bedre treff på ansiktsgjenkjenning enn vestlige alternativer og brukes mye i OSINT-miljøer.</p>
+        <p data-i18n="se">Den ryska sökmotorn har ofta bättre träffar på ansiktsigenkänning än västliga alternativ och används mycket i OSINT-miljöer.</p>
+        <p data-i18n="dk">Den russiske søgemaskine har ofte bedre træfsikkerhed på ansigtsgenkendelse end vestlige alternativer og bruges meget i OSINT-miljøer.</p>
+        <a class="tool-link" href="https://yandex.com/images" target="_blank" rel="noopener">yandex.com/images ↗</a>
+      </div>
+      <div class="tool-card">
+        <span class="tool-type">Video-verifisering</span>
+        <h3>InVID-WeVerify</h3>
+        <p data-i18n="no" class="active">Gratis nettleserutvidelse laget for journalister, som deler opp videoer i enkeltbilder for omvendt søk og sjekker metadata for manipulasjon.</p>
+        <p data-i18n="se">Gratis webbläsartillägg gjort för journalister, som delar upp videor i enskilda bilder för omvänd sökning och kontrollerar metadata för manipulation.</p>
+        <p data-i18n="dk">Gratis browserudvidelse lavet til journalister, som opdeler videoer i enkeltbilleder til omvendt søgning og tjekker metadata for manipulation.</p>
+        <a class="tool-link" href="https://weverify.eu/verification-plugin/" target="_blank" rel="noopener">weverify.eu ↗</a>
+      </div>
+      <div class="tool-card">
+        <span class="tool-type">Oversikt / oppslagsverk</span>
+        <h3>OSINT Framework</h3>
+        <p data-i18n="no" class="active">En fritt tilgjengelig, kuratert oversikt over hundrevis av gratis OSINT-verktøy organisert etter kategori — et godt sted å starte for nybegynnere.</p>
+        <p data-i18n="se">En fritt tillgänglig, kurerad översikt över hundratals gratis OSINT-verktyg organiserade efter kategori — ett bra ställe att börja för nybörjare.</p>
+        <p data-i18n="dk">Et frit tilgængeligt, kurateret overblik over hundredvis af gratis OSINT-værktøjer organiseret efter kategori — et godt sted at starte for begyndere.</p>
+        <a class="tool-link" href="https://osintframework.com" target="_blank" rel="noopener">osintframework.com ↗</a>
+      </div>
+      <div class="tool-card">
+        <span class="tool-type">Læringsressurs</span>
+        <h3 data-i18n="no" class="active">Bellingcat Online Investigation Toolkit</h3>
+        <h3 data-i18n="se">Bellingcat Online Investigation Toolkit</h3>
+        <h3 data-i18n="dk">Bellingcat Online Investigation Toolkit</h3>
+        <p data-i18n="no" class="active">En anerkjent, gratis samling av verktøy og korte veiledninger fra det uavhengige etterforskningsnettverket Bellingcat, mye brukt i journalistikk- og faktasjekkopplæring.</p>
+        <p data-i18n="se">En erkänd, gratis samling av verktyg och korta guider från det oberoende undersökande nätverket Bellingcat, mycket använd inom journalistik- och faktakollsutbildning.</p>
+        <p data-i18n="dk">En anerkendt, gratis samling af værktøjer og korte guides fra det uafhængige undersøgende netværk Bellingcat, meget brugt i journalistik- og faktatjek-uddannelse.</p>
+        <a class="tool-link" href="https://bellingcat.gitbook.io/toolkit" target="_blank" rel="noopener">bellingcat.gitbook.io ↗</a>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); margin-top:40px;" data-i18n="no" class="active">Offentlige registre og myndighetsdata</h3>
+    <h3 style="font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); margin-top:40px;" data-i18n="se">Offentliga register och myndighetsdata</h3>
+    <h3 style="font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); margin-top:40px;" data-i18n="dk">Offentlige registre og myndighedsdata</h3>
+    <p style="color:var(--ink-soft); font-size:13.5px; max-width:70ch; margin-top:6px;" data-i18n="no" class="active">Utenfor Norden finnes det en rekke offentlige, lovlige registre som kan brukes til å verifisere identiteten eller bakgrunnen til noen du er i kontakt med — særlig relevant hvis kontakten hevder å bo eller drive virksomhet i utlandet, for eksempel USA.</p>
+    <p style="color:var(--ink-soft); font-size:13.5px; max-width:70ch; margin-top:6px;" data-i18n="se">Utanför Norden finns det en rad offentliga, lagliga register som kan användas för att verifiera identiteten eller bakgrunden hos någon du är i kontakt med — särskilt relevant om kontakten uppger sig bo eller driva verksamhet utomlands, till exempel i USA.</p>
+    <p style="color:var(--ink-soft); font-size:13.5px; max-width:70ch; margin-top:6px;" data-i18n="dk">Uden for Norden findes der en række offentlige, lovlige registre, der kan bruges til at verificere identiteten eller baggrunden på nogen, du er i kontakt med — særligt relevant, hvis kontakten hævder at bo eller drive virksomhed i udlandet, fx i USA.</p>
+
+    <div class="tool-grid">
+      <div class="tool-card">
+        <span class="tool-type" data-i18n="no" class="active">Offentlig register (USA)</span>
+        <span class="tool-type" data-i18n="se">Offentligt register (USA)</span>
+        <span class="tool-type" data-i18n="dk">Offentligt register (USA)</span>
+        <h3>National Sex Offender Public Website</h3>
+        <p data-i18n="no" class="active">Offisiell nettside driftet av det amerikanske justisdepartementet (DOJ), som samler registrerte sedelighetsdømte fra alle delstater i ett søk. Gratis og åpen for alle.</p>
+        <p data-i18n="se">Officiell webbplats driven av det amerikanska justitiedepartementet (DOJ), som samlar registrerade sexualbrottsdömda från alla delstater i en sökning. Gratis och öppen för alla.</p>
+        <p data-i18n="dk">Officiel hjemmeside drevet af det amerikanske justitsministerium (DOJ), som samler registrerede sædelighedsdømte fra alle delstater i én søgning. Gratis og åben for alle.</p>
+        <a class="tool-link" href="https://www.nsopw.gov" target="_blank" rel="noopener">nsopw.gov ↗</a>
+      </div>
+      <div class="tool-card">
+        <span class="tool-type" data-i18n="no" class="active">Selskapsregister (globalt)</span>
+        <span class="tool-type" data-i18n="se">Bolagsregister (globalt)</span>
+        <span class="tool-type" data-i18n="dk">Selskabsregister (globalt)</span>
+        <h3>OpenCorporates</h3>
+        <p data-i18n="no" class="active">Verdens største åpne database over registrerte selskaper, med data hentet direkte fra offisielle nasjonale foretaksregistre i over 130 land. Nyttig for å sjekke om en påstått "bedrift" faktisk eksisterer.</p>
+        <p data-i18n="se">Världens största öppna databas över registrerade bolag, med data hämtad direkt från officiella nationella bolagsregister i över 130 länder. Användbart för att kontrollera om ett påstått "företag" faktiskt existerar.</p>
+        <p data-i18n="dk">Verdens største åbne database over registrerede selskaber, med data hentet direkte fra officielle nationale selskabsregistre i over 130 lande. Nyttigt til at tjekke, om en påstået "virksomhed" rent faktisk findes.</p>
+        <a class="tool-link" href="https://opencorporates.com" target="_blank" rel="noopener">opencorporates.com ↗</a>
+      </div>
+      <div class="tool-card">
+        <span class="tool-type" data-i18n="no" class="active">Selskapsregister (USA, børsnoterte)</span>
+        <span class="tool-type" data-i18n="se">Bolagsregister (USA, börsnoterade)</span>
+        <span class="tool-type" data-i18n="dk">Selskabsregister (USA, børsnoterede)</span>
+        <h3>SEC EDGAR</h3>
+        <p data-i18n="no" class="active">Det amerikanske finanstilsynets (SEC) offentlige database over alle børsnoterte selskapers pliktige rapportering. Nyttig hvis noen hevder å eie eller lede et større amerikansk selskap.</p>
+        <p data-i18n="se">Den amerikanska finansinspektionens (SEC) offentliga databas över alla börsnoterade bolags obligatoriska rapportering. Användbart om någon påstår sig äga eller leda ett större amerikanskt bolag.</p>
+        <p data-i18n="dk">Den amerikanske finanstilsynsmyndigheds (SEC) offentlige database over alle børsnoterede selskabers pligtige rapportering. Nyttigt, hvis nogen hævder at eje eller lede en større amerikansk virksomhed.</p>
+        <a class="tool-link" href="https://www.sec.gov/edgar/search/" target="_blank" rel="noopener">sec.gov/edgar ↗</a>
+      </div>
+      <div class="tool-card">
+        <span class="tool-type" data-i18n="no" class="active">Selskapsregister (UK)</span>
+        <span class="tool-type" data-i18n="se">Bolagsregister (UK)</span>
+        <span class="tool-type" data-i18n="dk">Selskabsregister (UK)</span>
+        <h3>Companies House</h3>
+        <p data-i18n="no" class="active">Storbritannias offisielle foretaksregister — gratis søk viser eierskap, styremedlemmer, stiftelsesdato og innleverte regnskap for ethvert registrert britisk selskap.</p>
+        <p data-i18n="se">Storbritanniens officiella bolagsregister — gratis sökning visar ägarskap, styrelseledamöter, bildandedatum och inlämnade bokslut för alla registrerade brittiska bolag.</p>
+        <p data-i18n="dk">Storbritanniens officielle selskabsregister — gratis søgning viser ejerskab, bestyrelsesmedlemmer, stiftelsesdato og indleverede regnskaber for ethvert registreret britisk selskab.</p>
+        <a class="tool-link" href="https://find-and-update.company-information.service.gov.uk" target="_blank" rel="noopener">gov.uk/companies-house ↗</a>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3 style="font-size:15px; margin:0 0 10px;" data-i18n="no" class="active">Ekteskapsregistre i USA — kan avsløre en skjult ektefelle</h3>
+      <h3 style="font-size:15px; margin:0 0 10px;" data-i18n="se">Äktenskapsregister i USA — kan avslöja en dold make/maka</h3>
+      <h3 style="font-size:15px; margin:0 0 10px;" data-i18n="dk">Ægteskabsregistre i USA — kan afsløre en skjult ægtefælle</h3>
+      <p style="font-size:13.5px; color:var(--ink-soft);" data-i18n="no" class="active">
+        En Loverboy eller romantikk-svindler kan i realiteten allerede være gift. I USA er ekteskap som hovedregel offentlige dokumenter, og de kan brukes til å sjekke om noen har vært gift tidligere eller er gift nå:
+      </p>
+      <p style="font-size:13.5px; color:var(--ink-soft);" data-i18n="se">
+        En Loverboy eller romansbedragare kan i själva verket redan vara gift. I USA är äktenskap som huvudregel offentliga dokument, och de kan användas för att kontrollera om någon har varit gift tidigare eller är gift nu:
+      </p>
+      <p style="font-size:13.5px; color:var(--ink-soft);" data-i18n="dk">
+        En Loverboy eller romancesvindler kan i virkeligheden allerede være gift. I USA er ægteskaber som hovedregel offentlige dokumenter, og de kan bruges til at tjekke, om nogen har været gift tidligere eller er gift nu:
+      </p>
+      <div style="margin-top:14px; display:grid; gap:12px;">
+        <div>
+          <strong style="font-size:13px;" data-i18n="no" class="active">Lokale kontorer:</strong>
+          <strong style="font-size:13px;" data-i18n="se">Lokala kontor:</strong>
+          <strong style="font-size:13px;" data-i18n="dk">Lokale kontorer:</strong>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="no" class="active"> Ekteskapsattester utstedes og oppbevares av "County Clerk" eller rettsarkivet i fylket der ekteskapet ble inngått. De fleste amerikanske fylker har egne nettsider for slike forespørsler.</span>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="se"> Äktenskapsbevis utfärdas och förvaras av "County Clerk" eller domstolsarkivet i det county där äktenskapet ingicks. De flesta amerikanska counties har egna webbplatser för sådana förfrågningar.</span>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="dk"> Ægteskabsattester udstedes og opbevares af "County Clerk" eller retsarkivet i det county, hvor ægteskabet blev indgået. De fleste amerikanske counties har egne hjemmesider til sådanne forespørgsler.</span>
+        </div>
+        <div>
+          <strong style="font-size:13px;" data-i18n="no" class="active">Unntak — "confidential marriage":</strong>
+          <strong style="font-size:13px;" data-i18n="se">Undantag — "confidential marriage":</strong>
+          <strong style="font-size:13px;" data-i18n="dk">Undtagelse — "confidential marriage":</strong>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="no" class="active"> I enkelte delstater, blant annet California, finnes det en ordning for "konfidensielt ekteskap" der attesten ikke er offentlig tilgjengelig. At et søk gir null treff, betyr derfor ikke nødvendigvis at personen ikke er gift.</span>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="se"> I vissa delstater, bland annat Kalifornien, finns det en ordning för "konfidentiellt äktenskap" där beviset inte är offentligt tillgängligt. Att en sökning ger noll träffar betyder därför inte nödvändigtvis att personen inte är gift.</span>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="dk"> I enkelte delstater, herunder Californien, findes der en ordning for "fortroligt ægteskab", hvor attesten ikke er offentligt tilgængelig. At en søgning giver nul resultater, betyder derfor ikke nødvendigvis, at personen ikke er gift.</span>
+        </div>
+        <div>
+          <strong style="font-size:13px;" data-i18n="no" class="active">Nettbasert søk:</strong>
+          <strong style="font-size:13px;" data-i18n="se">Sökning online:</strong>
+          <strong style="font-size:13px;" data-i18n="dk">Søgning online:</strong>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="no" class="active"> Mange fylker tilbyr nettbaserte søkesystemer for nyere ekteskapsjournaler. Søk etter "[fylkenavn] + marriage records search" for å finne riktig offisielt nettsted — bruk alltid fylkets egen .gov-side, ikke tredjepartstjenester som krever betaling for uverifisert informasjon.</span>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="se"> Många counties erbjuder onlinebaserade söksystem för nyare äktenskapsjournaler. Sök efter "[county-namn] + marriage records search" för att hitta rätt officiell webbplats — använd alltid countyts egen .gov-sida, inte tredjepartstjänster som kräver betalning för overifierad information.</span>
+          <span style="font-size:13px; color:var(--ink-soft);" data-i18n="dk"> Mange counties tilbyder onlinebaserede søgesystemer til nyere ægteskabsjournaler. Søg efter "[county-navn] + marriage records search" for at finde den korrekte officielle hjemmeside — brug altid countyets egen .gov-side, ikke tredjepartstjenester, der kræver betaling for uverificeret information.</span>
+        </div>
+      </div>
+      <p style="font-size:12px; color:var(--ink-faint); margin-top:14px;" data-i18n="no" class="active">Reglene for offentlig tilgang varierer fra delstat til delstat og endres over tid — sjekk alltid det aktuelle fylkets offisielle nettside for oppdatert praksis.</p>
+      <p style="font-size:12px; color:var(--ink-faint); margin-top:14px;" data-i18n="se">Reglerna för offentlig tillgång varierar från delstat till delstat och ändras över tid — kontrollera alltid det aktuella countyts officiella webbplats för uppdaterad praxis.</p>
+      <p style="font-size:12px; color:var(--ink-faint); margin-top:14px;" data-i18n="dk">Reglerne for offentlig adgang varierer fra delstat til delstat og ændres over tid — tjek altid det pågældende countys officielle hjemmeside for opdateret praksis.</p>
+    </div>
+
+    <div class="caution-box">
+      <h3 data-i18n="no" class="active">Bruk disse verktøyene ansvarlig</h3>
+      <h3 data-i18n="se">Använd dessa verktyg ansvarsfullt</h3>
+      <h3 data-i18n="dk">Brug disse værktøjer ansvarligt</h3>
+      <p data-i18n="no" class="active">Disse metodene er ment for å verifisere identiteten til noen du selv er i kontakt med — ikke for å overvåke, forfølge eller trakassere andre. Bruk kun offentlig tilgjengelig informasjon, del aldri resultater med tredjeparter uten grunn, og kontakt politiet fremfor å konfrontere en mistenkt svindler selv dersom du frykter for din sikkerhet. For opplæring i OSINT finnes det også gratis, nybegynnervennlige videokurs fra anerkjente kanaler — søk gjerne etter "OSINT for beginners" eller "reverse image search tutorial" på YouTube for oppdaterte, trinnvise gjennomganger.</p>
+      <p data-i18n="se">Dessa metoder är avsedda för att verifiera identiteten hos någon du själv är i kontakt med — inte för att övervaka, förfölja eller trakassera andra. Använd endast offentligt tillgänglig information, dela aldrig resultat med tredje part utan anledning, och kontakta polisen istället för att konfrontera en misstänkt bedragare själv om du fruktar för din säkerhet. För utbildning i OSINT finns det även gratis, nybörjarvänliga videokurser från erkända kanaler — sök gärna efter "OSINT for beginners" eller "reverse image search tutorial" på YouTube för uppdaterade, stegvisa genomgångar.</p>
+      <p data-i18n="dk">Disse metoder er beregnet til at verificere identiteten på nogen, du selv er i kontakt med — ikke til at overvåge, forfølge eller chikanere andre. Brug kun offentligt tilgængelig information, del aldrig resultater med tredjeparter uden grund, og kontakt politiet frem for selv at konfrontere en mistænkt svindler, hvis du frygter for din sikkerhed. Til oplæring i OSINT findes der også gratis, begyndervenlige videokurser fra anerkendte kanaler — søg gerne efter "OSINT for beginners" eller "reverse image search tutorial" på YouTube for opdaterede, trinvise gennemgange.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: PROTECTION -->
+<section class="block" id="beskyttelse">
+  <div class="wrap">
+    <div class="protect">
+      <div class="kicker">05 — <span data-i18n="no" class="active">Handling</span><span data-i18n="se">Handling</span><span data-i18n="dk">Handling</span></div>
+      <h2 data-i18n="no" class="active">Varselsignaler og beskyttelse</h2>
+      <h2 data-i18n="se">Varningssignaler och skydd</h2>
+      <h2 data-i18n="dk">Advarselstegn og beskyttelse</h2>
+
+      <div class="protect-grid">
+        <div class="protect-col">
+          <h3 data-i18n="no" class="active">Kritiske faresignaler</h3>
+          <h3 data-i18n="se">Kritiska varningssignaler</h3>
+          <h3 data-i18n="dk">Kritiske advarselstegn</h3>
+
+          <div class="flag-item"><span class="mark">→</span><p data-i18n="no" class="active">Forholdet utvikler seg svært raskt — "sjelevenn"-følelser i løpet av dager.</p>
+            <p data-i18n="se">Relationen utvecklas mycket snabbt — "själsfrände"-känslor inom loppet av dagar.</p>
+            <p data-i18n="dk">Forholdet udvikler sig meget hurtigt — "sjælevenn"-følelser inden for få dage.</p></div>
+          <div class="flag-item"><span class="mark">→</span><p data-i18n="no" class="active">Krav om hemmelighold rundt forholdet, økonomien eller kommunikasjonen.</p>
+            <p data-i18n="se">Krav på hemlighållande kring relationen, ekonomin eller kommunikationen.</p>
+            <p data-i18n="dk">Krav om hemmeligholdelse omkring forholdet, økonomien eller kommunikationen.</p></div>
+          <div class="flag-item"><span class="mark">→</span><p data-i18n="no" class="active">Gjentatte akutte "kriser" som krever raske pengeoverføringer eller lån.</p>
+            <p data-i18n="se">Upprepade akuta "kriser" som kräver snabba penningöverföringar eller lån.</p>
+            <p data-i18n="dk">Gentagne akutte "kriser", der kræver hurtige pengeoverførsler eller lån.</p></div>
+          <div class="flag-item"><span class="mark">→</span><p data-i18n="no" class="active">Motstand mot at du treffer familie, venner eller offentlige myndigheter.</p>
+            <p data-i18n="se">Motstånd mot att du träffar familj, vänner eller myndigheter.</p>
+            <p data-i18n="dk">Modstand mod at du mødes med familie, venner eller myndigheder.</p></div>
+          <div class="flag-item"><span class="mark">→</span><p data-i18n="no" class="active">Partneren kontrollerer telefon, sosiale medier eller hvem du snakker med, ofte forkledd som omsorg.</p>
+            <p data-i18n="se">Partnern kontrollerar telefon, sociala medier eller vem du pratar med, ofta förklätt som omtanke.</p>
+            <p data-i18n="dk">Partneren kontrollerer telefon, sociale medier eller hvem du taler med, ofte forklædt som omsorg.</p></div>
+          <div class="flag-item"><span class="mark">→</span><p data-i18n="no" class="active">Du føler deg skyldig eller redd for å skuffe partneren når du sier nei til noe.</p>
+            <p data-i18n="se">Du känner dig skyldig eller rädd för att göra partnern besviken när du säger nej till något.</p>
+            <p data-i18n="dk">Du føler dig skyldig eller bange for at skuffe partneren, når du siger nej til noget.</p></div>
+        </div>
+
+        <div class="protect-col">
+          <h3 data-i18n="no" class="active">Sikkerhetstiltak</h3>
+          <h3 data-i18n="se">Skyddsåtgärder</h3>
+          <h3 data-i18n="dk">Sikkerhedsforanstaltninger</h3>
+
+          <div class="flag-item"><span class="mark">✓</span><p data-i18n="no" class="active">Bruk omvendt bildesøk (f.eks. Google Bilder) for å sjekke profilbilder.</p>
+            <p data-i18n="se">Använd omvänd bildsökning (t.ex. Google Bilder) för att kontrollera profilbilder.</p>
+            <p data-i18n="dk">Brug omvendt billedsøgning (fx Google Billeder) til at tjekke profilbilleder.</p></div>
+          <div class="flag-item"><span class="mark">✓</span><p data-i18n="no" class="active">Del aldri BankID, passord eller identitetsdokumenter med noen du har møtt digitalt.</p>
+            <p data-i18n="se">Dela aldrig BankID, lösenord eller identitetshandlingar med någon du träffat digitalt.</p>
+            <p data-i18n="dk">Del aldrig MitID/BankID, adgangskoder eller identitetsdokumenter med nogen, du har mødt digitalt.</p></div>
+          <div class="flag-item"><span class="mark">✓</span><p data-i18n="no" class="active">Behold egne bankkontoer og økonomisk uavhengighet gjennom hele forholdet.</p>
+            <p data-i18n="se">Behåll egna bankkonton och ekonomiskt oberoende genom hela relationen.</p>
+            <p data-i18n="dk">Behold egne bankkonti og økonomisk uafhængighed gennem hele forholdet.</p></div>
+          <div class="flag-item"><span class="mark">✓</span><p data-i18n="no" class="active">Ta kontakt med politiet eller en spesialisert organisasjon hvis noe føles galt.</p>
+            <p data-i18n="se">Kontakta polisen eller en specialiserad organisation om något känns fel.</p>
+            <p data-i18n="dk">Kontakt politiet eller en specialiseret organisation, hvis noget føles forkert.</p></div>
+          <div class="flag-item"><span class="mark">✓</span><p data-i18n="no" class="active">Fortell minst én person du stoler på om relasjonen — en tredjeperson kan lettere se mønstre du selv er for nær til å oppdage.</p>
+            <p data-i18n="se">Berätta för minst en person du litar på om relationen — en tredje person kan lättare se mönster som du själv är för nära för att upptäcka.</p>
+            <p data-i18n="dk">Fortæl mindst én person, du stoler på, om forholdet — en tredjeperson kan lettere se mønstre, som du selv er for tæt på til at opdage.</p></div>
+        </div>
+      </div>
+
+      <div class="helplines">
+        <h3 data-i18n="no" class="active">Hjelpeorganisasjoner</h3>
+        <h3 data-i18n="se">Hjälporganisationer</h3>
+        <h3 data-i18n="dk">Hjælpeorganisationer</h3>
+        <div class="help-row">
+          <a class="help-chip" href="https://www.payoke.be" target="_blank" rel="noopener">Payoke (Belgium) ↗</a>
+          <a class="help-chip" href="https://www.kok-gegen-menschenhandel.de" target="_blank" rel="noopener">KOK Germany ↗</a>
+          <a class="help-chip" href="https://romania.iom.int" target="_blank" rel="noopener">IOM Romania ↗</a>
+          <a class="help-chip" href="https://home-affairs.ec.europa.eu/policies/internal-security/organised-crime-and-human-trafficking/together-against-trafficking-human-beings_en" target="_blank" rel="noopener">EU Anti-Trafficking ↗</a>
+        </div>
+        <p style="font-size:12px; color:#B9CBFF; margin-top:16px;" data-i18n="no" class="active">Ved akutt fare, kontakt lokalt nødnummer (i Norge: 112 / 02800).</p>
+        <p style="font-size:12px; color:#B9CBFF; margin-top:16px;" data-i18n="se">Vid akut fara, kontakta lokalt nödnummer (i Sverige: 112).</p>
+        <p style="font-size:12px; color:#B9CBFF; margin-top:16px;" data-i18n="dk">I akut fare, kontakt lokalt alarmnummer (i Danmark: 112).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Nordic Intelligence — Romance Fraud &amp; Exploitation Awareness Portal.</p>
+    <p>Data compiled from the European Commission (2025), Payoke, KOK Germany, and IOM Romania. This portal is for educational and prevention purposes only.</p>
+  </div>
+</footer>
+
+<script>
+  function setLang(lang){
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      el.classList.toggle('active', el.getAttribute('data-i18n') === lang);
+    });
+    document.querySelectorAll('.lang-switch button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('btn-' + lang).classList.add('active');
+    document.documentElement.lang = lang;
+  }
+  setLang('no');
+</script>
+
+</body>
+</html>
